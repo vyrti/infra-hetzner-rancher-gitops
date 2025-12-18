@@ -23,6 +23,13 @@ spec:
         hostRootFsMount:
           enabled: true
         
+        service:
+          port: 9101
+          targetPort: 9101
+        
+        extraArgs:
+          - --web.listen-address=:9101
+        
         # Tolerate all taints to run on all nodes
         tolerations:
           - operator: Exists

@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  mimir-overview.json: |-
+    {
+      "code": "NotFound",
+      "message": "dashboard not found",
+      "requestId": "b6df15b2-3fd4-4601-a2ce-00fcb2751523"
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    grafana_dashboard: "1"
+  name: grafana-dashboard-mimir-overview

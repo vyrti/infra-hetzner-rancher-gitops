@@ -34,16 +34,15 @@ for entry in "${DASHBOARDS[@]}"; do
 done
 
 echo "Generating ConfigMaps..."
-cat <<EOF > dashboards-manifest.yaml
-apiVersion: v1
-kind: List
-items:
-EOF
+# Remove old monolithic file if it exists
+rm -f dashboards-manifest.yaml
 
 for file in dashboards_json/*.json; do
     BASENAME=$(basename "$file" .json)
-    # Escape json for wrapping in yaml
-    # We use kubectl create dry-run to handle escaping safely
+    OUTPUT_FILE="${BASENAME}.yaml"
+    
+    echo "Processing $BASENAME -> $OUTPUT_FILE"
+    
     # Create valid YAML with labels using perl for cross-platform safety
     kubectl create configmap "grafana-dashboard-${BASENAME}" \
         --from-file="${BASENAME}.json=${file}" \
@@ -52,11 +51,9 @@ for file in dashboards_json/*.json; do
     perl -i -pe 's/metadata:/metadata:\n  labels:\n    grafana_dashboard: "1"/' temp_cm.yaml
     perl -i -pe 's/creationTimestamp: null//' temp_cm.yaml
     
-    cat temp_cm.yaml >> dashboards-manifest.yaml
-    echo "---" >> dashboards-manifest.yaml
-    rm temp_cm.yaml
+    mv temp_cm.yaml "$OUTPUT_FILE"
 done
 
 echo "Cleaning up..."
 rm -rf dashboards_json
-echo "Done. Created dashboards-manifest.yaml"
+echo "Done. Created individual dashboard files."

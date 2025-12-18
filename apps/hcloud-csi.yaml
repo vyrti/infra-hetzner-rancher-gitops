@@ -1,0 +1,31 @@
+# Hetzner CSI Driver - Persistent volumes support
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hcloud-csi
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"  # Deploy before everything else
+spec:
+  project: default
+  source:
+    repoURL: https://charts.hetzner.cloud
+    targetRevision: 2.12.1
+    chart: hcloud-csi
+    helm:
+      values: |
+        storageClasses:
+          - name: hcloud-volumes
+            defaultStorageClass: true
+            reclaimPolicy: Delete
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

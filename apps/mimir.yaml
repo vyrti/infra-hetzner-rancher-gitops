@@ -19,18 +19,25 @@ spec:
       values: |
         # Minimal deployment for small clusters
         mimir:
+          auth_enabled: false
           structuredConfig:
             common:
               storage:
-                backend: filesystem
+                backend: s3
+                s3:
+                  endpoint: mimir-minio.mimir.svc:9000
+                  access_key_id: mimir
+                  secret_access_key: mimir
+                  insecure: true
+                  bucket_name: mimir-blocks
             blocks_storage:
-              backend: filesystem
-              filesystem:
-                dir: /data/blocks
+              backend: s3
+              s3:
+                bucket_name: mimir-blocks
             ruler_storage:
-              backend: filesystem
-              filesystem:
-                dir: /data/ruler
+              backend: s3
+              s3:
+                bucket_name: mimir-ruler
             limits:
               max_global_series_per_user: 1500000
               max_global_series_per_metric: 50000
@@ -39,7 +46,7 @@ spec:
             compactor:
               data_dir: /data/compactor
         
-        # Single-replica mode for development
+        # Deployment components
         alertmanager:
           enabled: false
         
@@ -70,7 +77,7 @@ spec:
           replicas: 1
         
         query_scheduler:
-          enabled: false
+          enabled: true
         
         ruler:
           enabled: false
@@ -106,10 +113,13 @@ spec:
                 hosts:
                   - mimir.aleklab.com
         
-        # Disable minio and rollout operator
-        rollout_operator:
-          enabled: false
+        # Enable minio for storage
         minio:
+          enabled: true
+          persistence:
+            size: 20Gi
+        
+        rollout_operator:
           enabled: false
         
         # Disable monitoring (no prometheus-operator CRDs)

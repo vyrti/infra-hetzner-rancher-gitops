@@ -111,10 +111,12 @@ spec:
               prometheus.scrape "kube_state_metrics" {
                 targets    = discovery.relabel.kube_state_metrics.output
                 forward_to = [prometheus.remote_write.mimir.receiver]
+                clustering {
+                  enabled = true
+                }
                 scrape_interval = "30s"
               }
               
-              }
 
               // ============================================
               // METRICS SCRAPING - OPENBAO
@@ -149,6 +151,9 @@ spec:
                 metrics_path = "/v1/sys/metrics"
                 params = {
                   "format" = ["prometheus"],
+                }
+                clustering {
+                  enabled = true
                 }
                 scrape_interval = "30s"
               }
@@ -212,6 +217,9 @@ spec:
               prometheus.scrape "generic_endpoints" {
                 targets    = discovery.relabel.generic_endpoints.output
                 forward_to = [prometheus.remote_write.mimir.receiver]
+                clustering {
+                  enabled = true
+                }
                 scrape_interval = "30s"
               }
 
@@ -245,6 +253,9 @@ spec:
               prometheus.scrape "traefik" {
                 targets    = discovery.relabel.traefik_pods.output
                 forward_to = [prometheus.remote_write.mimir.receiver]
+                clustering {
+                  enabled = true
+                }
                 scrape_interval = "30s"
               }
               
@@ -273,6 +284,9 @@ spec:
               prometheus.scrape "node_exporter" {
                 targets    = discovery.relabel.node_exporter.output
                 forward_to = [prometheus.remote_write.mimir.receiver]
+                clustering {
+                  enabled = true
+                }
                 scrape_interval = "30s"
               }
               
@@ -312,6 +326,9 @@ spec:
                   ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
                   insecure_skip_verify = true
                 }
+                clustering {
+                  enabled = true
+                }
                 scrape_interval = "30s"
               }
               
@@ -346,6 +363,9 @@ spec:
                 tls_config {
                   ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
                   insecure_skip_verify = true
+                }
+                clustering {
+                  enabled = true
                 }
                 scrape_interval = "30s"
               }
@@ -384,6 +404,14 @@ spec:
                   }
                 }
               }
+        
+        alloy:
+          clustering:
+            enabled: true
+        
+        # Service for clustering (gossip)
+        service:
+          enabled: true
         
         controller:
           type: daemonset

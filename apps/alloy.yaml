@@ -352,7 +352,7 @@ spec:
                   target_label  = "node"
                 }
                 rule {
-                  replacement   = "cadvisor"
+                  replacement   = "kubelet"
                   target_label  = "job"
                 }
               }

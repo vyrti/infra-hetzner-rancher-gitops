@@ -149,3 +149,34 @@ When fixing config (e.g., incorrect Service URL):
    kubectl get cm -n monitoring alloy -o yaml
    ```
 
+---
+
+## 6. General Debugging & Discovery
+
+### Discovering Service Names
+When internal DNS fails, check the actual service names.
+```bash
+# List services in a namespace
+kubectl get svc -n mimir
+kubectl get svc -n monitoring | grep loki
+```
+
+### Checking ArgoCD Application Status
+View the sync and health status of all GitOps applications.
+```bash
+kubectl get applications -n argocd
+```
+
+### Diagnosing Pod Startup Issues
+If a pod is stuck in `Pending` or `Init`, describe it to see events (e.g., MountVolume.SetUp failed).
+```bash
+kubectl describe pod -n monitoring <pod-name>
+```
+
+### Waiting for Pod Readiness
+Wait for a pod to become ready during a script or manual rollout.
+```bash
+kubectl wait --for=condition=ready pod -n monitoring -l app.kubernetes.io/name=grafana --timeout=120s
+```
+
+

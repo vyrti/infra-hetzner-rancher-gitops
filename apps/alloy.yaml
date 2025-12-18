@@ -19,6 +19,8 @@ spec:
     helm:
       values: |
         alloy:
+          clustering:
+            enabled: true
           configMap:
             content: |
               // ============================================
@@ -404,10 +406,6 @@ spec:
                   }
                 }
               }
-        
-        alloy:
-          clustering:
-            enabled: true
         
         # Service for clustering (gossip)
         service:

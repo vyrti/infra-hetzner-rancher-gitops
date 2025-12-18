@@ -70,7 +70,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Mimir",
           "fill": 1,
           "gridPos": {
             "h": 9,
@@ -155,7 +155,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Mimir",
           "fill": 1,
           "gridPos": {
             "h": 9,
@@ -238,7 +238,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Mimir",
           "description": "nginx_upstream_response_msecs_avg",
           "fill": 1,
           "gridPos": {
@@ -323,7 +323,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Mimir",
           "fill": 1,
           "gridPos": {
             "h": 9,
@@ -408,7 +408,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Mimir",
           "fill": 1,
           "gridPos": {
             "h": 9,
@@ -491,7 +491,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Mimir",
           "fill": 1,
           "gridPos": {
             "h": 9,
@@ -582,7 +582,7 @@ data:
               "text": "default",
               "value": "default"
             },
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": "Mimir",
             "hide": 0,
             "includeAll": false,
             "label": null,

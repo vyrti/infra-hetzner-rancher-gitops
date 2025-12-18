@@ -107,7 +107,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -168,7 +168,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "time() - max(minio_node_process_starttime_seconds{job=~\"$scrape_jobs\"})",
@@ -188,7 +188,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -249,7 +249,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (instance) (minio_s3_traffic_received_bytes{job=~\"$scrape_jobs\"})",
@@ -270,7 +270,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -370,7 +370,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "topk(1, sum(minio_cluster_capacity_usable_total_bytes{job=~\"$scrape_jobs\"}) by (instance)) - topk(1, sum(minio_cluster_capacity_usable_free_bytes{job=~\"$scrape_jobs\"}) by (instance))",
@@ -385,7 +385,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "topk(1, sum(minio_cluster_capacity_usable_free_bytes{job=~\"$scrape_jobs\"}) by (instance)) ",
@@ -401,7 +401,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -523,7 +523,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -540,7 +540,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -592,7 +592,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "disableTextWrap": false,
               "editorMode": "code",
@@ -616,7 +616,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -700,7 +700,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -722,7 +722,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -783,7 +783,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (instance) (minio_s3_traffic_sent_bytes{job=~\"$scrape_jobs\"})",
@@ -804,7 +804,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -888,7 +888,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -910,7 +910,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -957,7 +957,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "disableTextWrap": false,
               "editorMode": "code",
@@ -979,7 +979,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -1027,7 +1027,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -1046,7 +1046,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -1065,7 +1065,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -1133,7 +1133,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -1152,7 +1152,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -1234,7 +1234,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server) (rate(minio_s3_traffic_received_bytes{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -1250,7 +1250,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -1332,7 +1332,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server) (rate(minio_s3_traffic_sent_bytes{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -1348,7 +1348,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -1413,7 +1413,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "max(minio_cluster_nodes_online_total{job=~\"$scrape_jobs\"})",
@@ -1434,7 +1434,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -1502,7 +1502,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -1521,7 +1521,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -1575,7 +1575,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "max(minio_heal_time_last_activity_nano_seconds{job=~\"$scrape_jobs\"})",
@@ -1595,7 +1595,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -1649,7 +1649,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "max(minio_usage_last_activity_nano_seconds{job=~\"$scrape_jobs\"})",
@@ -1676,7 +1676,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -1722,7 +1722,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server,api) (increase(minio_s3_requests_total{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -1774,7 +1774,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -1820,7 +1820,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server,api) (increase(minio_s3_requests_4xx_errors_total{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -1872,7 +1872,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -1918,7 +1918,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server,api) (increase(minio_s3_requests_5xx_errors_total{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -1963,7 +1963,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -2014,7 +2014,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "disableTextWrap": false,
               "editorMode": "builder",
@@ -2031,7 +2031,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "disableTextWrap": false,
               "editorMode": "builder",
@@ -2048,7 +2048,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "disableTextWrap": false,
               "editorMode": "builder",
@@ -2065,7 +2065,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "disableTextWrap": false,
               "editorMode": "builder",
@@ -2082,7 +2082,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "disableTextWrap": false,
               "editorMode": "builder",
@@ -2103,7 +2103,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -2159,7 +2159,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -2182,7 +2182,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -2228,7 +2228,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_io_rchar_bytes{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2241,7 +2241,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_io_wchar_bytes{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2285,7 +2285,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -2338,7 +2338,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2355,7 +2355,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "Total number of bytes received and sent on MinIO cluster",
           "fieldConfig": {
@@ -2438,7 +2438,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2455,7 +2455,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_inter_node_traffic_received_bytes{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2477,7 +2477,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -2528,7 +2528,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "minio_node_file_descriptor_open_total{job=~\"$scrape_jobs\"}",
@@ -2581,7 +2581,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "Number of online drives per MinIO Server",
           "fieldConfig": {
@@ -2631,7 +2631,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_syscall_read_total{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2646,7 +2646,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_syscall_write_total{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2696,7 +2696,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -2742,7 +2742,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_scanner_objects_scanned{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2792,7 +2792,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -2838,7 +2838,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_scanner_versions_scanned{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2888,7 +2888,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -2934,7 +2934,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_scanner_directories_scanned{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -2980,7 +2980,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "description": "",
           "fieldConfig": {
@@ -3040,7 +3040,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "minio_cluster_kms_uptime{job=~\"$scrape_jobs\"}",
@@ -3067,7 +3067,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -3113,7 +3113,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server) (increase(minio_cluster_kms_request_error{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -3162,7 +3162,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -3209,7 +3209,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server) (minio_cluster_kms_online{job=~\"$scrape_jobs\"})",
@@ -3259,7 +3259,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -3305,7 +3305,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_scanner_bucket_scans_finished{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -3358,7 +3358,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -3404,7 +3404,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server) (increase(minio_cluster_kms_request_failure{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -3456,7 +3456,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -3502,7 +3502,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "sum by (server) (rate(minio_cluster_kms_request_success{job=~\"$scrape_jobs\"}[$__rate_interval]))",
@@ -3551,7 +3551,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "Mimir"
           },
           "fieldConfig": {
             "defaults": {
@@ -3597,7 +3597,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "Mimir"
               },
               "exemplar": true,
               "expr": "rate(minio_node_scanner_bucket_scans_started{job=~\"$scrape_jobs\"}[$__rate_interval])",
@@ -3652,7 +3652,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "Mimir"
             },
             "definition": "label_values(job)",
             "hide": 0,

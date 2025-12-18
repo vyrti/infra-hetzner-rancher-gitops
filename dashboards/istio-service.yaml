@@ -1332,22 +1332,21 @@ data:
     \"\",\n        \"tagsQuery\": \"\",\n        \"type\": \"query\",\n        \"useTags\":
     false\n      },\n      {\n        \"current\": {\n          \"selected\": false,\n
     \         \"text\": \"destination\",\n          \"value\": \"destination\"\n        },\n
-    \       \"datasource\": \"${DS_PROMETHEUS}\",\n        \"definition\": \"\",\n
-    \       \"hide\": 0,\n        \"includeAll\": false,\n        \"label\": \"Reporter\",\n
-    \       \"multi\": true,\n        \"name\": \"qrep\",\n        \"options\": [\n
-    \         {\n            \"selected\": false,\n            \"text\": \"source\",\n
-    \           \"value\": \"source\"\n          },\n          {\n            \"selected\":
-    true,\n            \"text\": \"destination\",\n            \"value\": \"destination\"\n
-    \         }\n        ],\n        \"query\": \"source,destination\",\n        \"refresh\":
-    1,\n        \"regex\": \"\",\n        \"skipUrlSync\": false,\n        \"sort\":
-    1,\n        \"tagValuesQuery\": \"\",\n        \"tagsQuery\": \"\",\n        \"type\":
-    \"custom\",\n        \"useTags\": false\n      },\n      {\n        \"current\":
-    {\n          \"selected\": false,\n          \"text\": \"All\",\n          \"value\":
-    \"$__all\"\n        },\n        \"datasource\": {\n          \"type\": \"prometheus\",\n
-    \         \"uid\": \"${datasource}\"\n        },\n        \"definition\": \"\",\n
-    \       \"hide\": 0,\n        \"includeAll\": true,\n        \"label\": \"Client
-    Cluster\",\n        \"multi\": true,\n        \"name\": \"srccluster\",\n        \"options\":
-    [],\n        \"query\": \"query_result(sum(istio_requests_total{reporter=~\\\"$qrep\\\",
+    \       \"datasource\": \"Mimir\",\n        \"definition\": \"\",\n        \"hide\":
+    0,\n        \"includeAll\": false,\n        \"label\": \"Reporter\",\n        \"multi\":
+    true,\n        \"name\": \"qrep\",\n        \"options\": [\n          {\n            \"selected\":
+    false,\n            \"text\": \"source\",\n            \"value\": \"source\"\n
+    \         },\n          {\n            \"selected\": true,\n            \"text\":
+    \"destination\",\n            \"value\": \"destination\"\n          }\n        ],\n
+    \       \"query\": \"source,destination\",\n        \"refresh\": 1,\n        \"regex\":
+    \"\",\n        \"skipUrlSync\": false,\n        \"sort\": 1,\n        \"tagValuesQuery\":
+    \"\",\n        \"tagsQuery\": \"\",\n        \"type\": \"custom\",\n        \"useTags\":
+    false\n      },\n      {\n        \"current\": {\n          \"selected\": false,\n
+    \         \"text\": \"All\",\n          \"value\": \"$__all\"\n        },\n        \"datasource\":
+    {\n          \"type\": \"prometheus\",\n          \"uid\": \"${datasource}\"\n
+    \       },\n        \"definition\": \"\",\n        \"hide\": 0,\n        \"includeAll\":
+    true,\n        \"label\": \"Client Cluster\",\n        \"multi\": true,\n        \"name\":
+    \"srccluster\",\n        \"options\": [],\n        \"query\": \"query_result(sum(istio_requests_total{reporter=~\\\"$qrep\\\",
     destination_service=\\\"$service\\\"}) by (source_cluster) or sum(istio_tcp_sent_bytes_total{reporter=~\\\"$qrep\\\",
     destination_service=~\\\"$service\\\"}) by (source_cluster))\",\n        \"refresh\":
     1,\n        \"regex\": \"/.*cluster=\\\"([^\\\"]*).*/\",\n        \"skipUrlSync\":

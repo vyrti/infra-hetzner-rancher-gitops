@@ -32,6 +32,8 @@ kubectl apply -f ../gitops/root.yaml
 | **OpenBao** | 0.9.0 | openbao |
 | **GitLab** | 9.6.2 | gitlab |
 | **Velero** | 11.2.0 | velero |
+| **Argo Workflows** | 0.46.2 | argo |
+| **MLflow** | 5.1.17 | mlflow |
 
 ## Monitoring Architecture
 
@@ -75,6 +77,8 @@ kubectl apply -f ../gitops/root.yaml
 | Kubecost | https://kubecost.aleklab.com |
 | Vault (OpenBao) | https://vault.aleklab.com |
 | GitLab | https://gitlab.aleklab.com |
+| Argo Workflows | https://workflows.aleklab.com |
+| MLflow | https://mlflow.aleklab.com |
 
 ## Credentials
 
@@ -122,6 +126,19 @@ kubectl -n openbao exec openbao-0 -- cat /vault/data/init.json 2>/dev/null || \
 ```bash
 # No authentication by default (internal services)
 # Accessed through Grafana data sources
+```
+
+### MLflow
+```bash
+# No authentication enabled for Tracking Server (open access)
+# MinIO (Artifacts): User: minio, Pass: minio123
+# PostgreSQL: User: mlflow, Pass: mlflow123
+```
+
+### Argo Workflows
+```bash
+# Server authentication enabled
+# Get token (if using client auth) or check specific auth mode details in values
 ```
 
 ## Observability Guide

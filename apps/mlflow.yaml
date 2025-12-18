@@ -1,0 +1,66 @@
+# MLflow - Machine Learning Lifecycle Platform
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mlflow
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 5.1.17
+    chart: mlflow
+    helm:
+      values: |
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          hostname: mlflow.aleklab.com
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.tls: "true"
+          tls: true
+          extraTls:
+            - hosts:
+                - mlflow.aleklab.com
+              secretName: mlflow-tls
+
+        # Use integrated MinIO for artifact storage
+        minio:
+          enabled: true
+          auth:
+            rootUser: minio
+            rootPassword: minio123
+        
+        # Use integrated PostgreSQL for tracking server
+        postgresql:
+          enabled: true
+          auth:
+            username: mlflow
+            password: mlflow123
+            database: mlflow
+        
+        # MLflow Tracking Server config
+        tracking:
+          auth:
+            enabled: false # Open access for simplicity (or configure basic auth)
+          podSecurityContext:
+            enabled: false
+          containerSecurityContext:
+            enabled: false
+            
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mlflow
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

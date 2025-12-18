@@ -1,0 +1,49 @@
+# Argo Workflows - Workflow engine for Kubernetes
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-workflows
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 0.46.2
+    chart: argo-workflows
+    helm:
+      values: |
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+            hosts:
+              - workflows.aleklab.com
+            tls:
+              - secretName: argo-workflows-tls
+                hosts:
+                  - workflows.aleklab.com
+          # Enable authentication (server mode)
+          authModes:
+            - server
+        controller:
+          workflowNamespaces:
+            - default
+            - argo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

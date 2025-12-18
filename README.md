@@ -33,7 +33,7 @@ kubectl apply -f ../gitops/root.yaml
 | **GitLab** | 9.6.2 | gitlab |
 | **Velero** | 11.2.0 | velero |
 | **Argo Workflows** | 0.46.2 | argo |
-| **MLflow** | 5.1.17 | mlflow |
+| **MLflow** | 1.8.1 | mlflow |
 
 ## Monitoring Architecture
 
@@ -130,9 +130,13 @@ kubectl -n openbao exec openbao-0 -- cat /vault/data/init.json 2>/dev/null || \
 
 ### MLflow
 ```bash
-# No authentication enabled for Tracking Server (open access)
-# MinIO (Artifacts): User: minio, Pass: minio123
-# PostgreSQL: User: mlflow, Pass: mlflow123
+# Tracking Server: Open access
+# Artifact Storage (MinIO): Uses generic 'minio' credentials from Velero instance
+# User: minio
+# Pass: minio123
+# PostgreSQL:
+# User: mlflow
+# Pass: mlflow123
 ```
 
 ### Argo Workflows

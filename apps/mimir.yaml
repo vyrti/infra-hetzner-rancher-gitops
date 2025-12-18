@@ -26,16 +26,16 @@ spec:
                 backend: s3
                 s3:
                   endpoint: mimir-minio.mimir.svc:9000
-                  access_key_id: mimir
-                  secret_access_key: mimir
+                  access_key_id: grafana-mimir
+                  secret_access_key: supersecret
                   insecure: true
                   bucket_name: mimir-tsdb
             blocks_storage:
               backend: s3
               s3:
                 endpoint: mimir-minio.mimir.svc:9000
-                access_key_id: mimir
-                secret_access_key: mimir
+                access_key_id: grafana-mimir
+                secret_access_key: supersecret
                 insecure: true
                 bucket_name: mimir-tsdb
 

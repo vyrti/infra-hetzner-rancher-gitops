@@ -20,6 +20,9 @@ spec:
         adminUser: admin
         adminPassword: admin  # Change in production!
         
+        deploymentStrategy:
+          type: Recreate
+        
         ingress:
           enabled: true
           ingressClassName: traefik

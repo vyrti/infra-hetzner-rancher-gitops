@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://community-charts.github.io/helm-charts
-    # targetRevision: latest # Letting ArgoCD pick latest
+    targetRevision: 1.8.1 # Restoring confirmed version
     chart: mlflow
     helm:
       values: |

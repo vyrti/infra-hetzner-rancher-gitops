@@ -16,10 +16,9 @@ spec:
     chart: mlflow
     helm:
       values: |
+        # Global Bitnami image configuration
         global:
           imageRegistry: quay.io
-          # Explicitly set repositories for common helpers if needed, but registry SHOULD cover it.
-          # Attempting valid param structure for Bitnami common chart
           compatibility:
             openshift:
               adaptSecurityContext: auto
@@ -41,6 +40,9 @@ spec:
         # Use integrated MinIO for artifact storage
         minio:
           enabled: true
+          image:
+            registry: quay.io
+            repository: bitnami/minio
           auth:
             rootUser: minio
             rootPassword: minio123
@@ -48,13 +50,18 @@ spec:
         # Use integrated PostgreSQL for tracking server
         postgresql:
           enabled: true
+          image:
+            registry: quay.io
+            repository: bitnami/postgresql
           auth:
             username: mlflow
             password: mlflow123
             database: mlflow
         
-        # MLflow Tracking Server config
-        tracking:
+        # Main MLflow image
+        image:
+          registry: quay.io
+          repository: bitnami/mlflow
           auth:
             enabled: false # Open access for simplicity (or configure basic auth)
           podSecurityContext:

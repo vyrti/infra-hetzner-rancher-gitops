@@ -94,3 +94,58 @@ Identify which process is using a specific port (e.g., 9100) on the host network
 # List all pods using hostNetwork and their listen addresses
 kubectl get pods -A -o json | jq -r '.items[] | select(.spec.hostNetwork == true) | .metadata.namespace + "/" + .metadata.name + " " + (.spec.containers[].args[]? // "")' | grep 9100
 ```
+
+---
+
+## 5. ArgoCD & GitOps Sync Issues (Advanced)
+
+### Fixing "Progressing" / "OutOfSync" Status
+If an app like Grafana or GitLab is stuck in "Progressing":
+
+**1. Check the Resource Customizations (Health Checks)**
+HostNetwork Ingresses often stay "Progressing" because they lack a LoadBalancer IP. We fixed this by adding a custom health check to `argocd-cm`.
+```bash
+# View current health checks
+kubectl get configmap -n argocd argocd-cm -o jsonpath='{.data.resource\.customizations\.health\.networking\.k8s\.io_Ingress}'
+```
+
+**2. Manual ConfigMap Patching (When Sync Fails)**
+If ArgoCD says "Synced" but the cluster state is old (e.g. `mimir-nginx` vs `mimir-gateway` URL), you might need to manually patch the resource to unblock things.
+```bash
+# Example: Manually fixing Grafana Datasources ConfigMap
+kubectl get cm -n monitoring grafana -o json | sed 's/mimir-nginx/mimir-gateway/g' | kubectl apply -f -
+
+# Then restart the deployment
+kubectl rollout restart deployment -n monitoring grafana
+```
+
+**3. Restarting Services/Controllers**
+Sometimes config changes aren't picked up until a restart.
+```bash
+# Restart Alloy (DaemonSet)
+kubectl rollout restart ds -n monitoring alloy
+
+# Restart ArgoCD Repo Server (if cache is stale)
+kubectl rollout restart deployment -n argocd argocd-repo-server
+```
+
+**4. Force Deleting Stuck Resources**
+If a namespace or resource won't delete (finalizers):
+```bash
+# Patch finalizers to empty
+kubectl patch app <app-name> -n argocd -p '{"metadata":{"finalizers":[]}}' --type=merge
+```
+
+### GitOps Sync Workflow
+When fixing config (e.g., incorrect Service URL):
+1. **Fix in Git**: Commit the change to `apps/grafana.yaml`.
+2. **Push**: `git push`
+3. **Hard Refresh**: ArgoCD might cache the old commit.
+   ```bash
+   kubectl -n argocd patch application <app> --type merge -p '{"metadata":{"annotations":{"argocd.argoproj.io/refresh":"hard"}}}'
+   ```
+4. **Verify Object**: check the actual object in K8s.
+   ```bash
+   kubectl get cm -n monitoring alloy -o yaml
+   ```
+

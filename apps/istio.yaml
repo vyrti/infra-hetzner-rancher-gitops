@@ -73,6 +73,11 @@ spec:
       kind: Deployment
       jsonPointers:
         - /spec/replicas
+        - /spec/template/metadata/annotations
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks
   syncPolicy:
     automated:
       prune: true

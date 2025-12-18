@@ -278,6 +278,10 @@ spec:
                   target_label  = "node"
                 }
                 rule {
+                  source_labels = ["__meta_kubernetes_endpoint_node_name"]
+                  target_label  = "instance"
+                }
+                rule {
                   replacement   = "node-exporter"
                   target_label  = "job"
                 }

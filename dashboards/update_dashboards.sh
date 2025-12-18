@@ -28,6 +28,8 @@ for entry in "${DASHBOARDS[@]}"; do
     echo "Fetching $NAME (ID: $ID)..."
     curl -sL "https://grafana.com/api/dashboards/${ID}/revisions/latest/download" | \
     sed 's/${DS_MIMIR}/Mimir/g' | \
+    sed 's/${DS_PROMETHEUS}/Mimir/g' | \
+    sed 's/${ds_prometheus}/Mimir/g' | \
     sed 's/${DS_LOKI}/Loki/g' | \
     sed 's/${DS_TEMPO}/Tempo/g' \
     > "dashboards_json/${NAME}.json"

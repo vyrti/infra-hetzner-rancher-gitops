@@ -1,0 +1,124 @@
+# Mimir - Long-term metrics storage
+# Receives metrics from Prometheus via remote write
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mimir
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"  # Deploy before Prometheus
+spec:
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 6.0.5
+    chart: mimir-distributed
+    helm:
+      values: |
+        # Minimal deployment for small clusters
+        mimir:
+          structuredConfig:
+            common:
+              storage:
+                backend: filesystem
+            blocks_storage:
+              backend: filesystem
+              filesystem:
+                dir: /data/blocks
+            ruler_storage:
+              backend: filesystem
+              filesystem:
+                dir: /data/ruler
+            limits:
+              max_global_series_per_user: 1500000
+              max_global_series_per_metric: 50000
+              ingestion_rate: 50000
+              ingestion_burst_size: 100000
+        
+        # Single-replica mode for development
+        alertmanager:
+          enabled: false
+        
+        compactor:
+          replicas: 1
+          persistentVolume:
+            enabled: true
+            size: 20Gi
+        
+        distributor:
+          replicas: 1
+        
+        ingester:
+          replicas: 1
+          persistentVolume:
+            enabled: true
+            size: 20Gi
+          zoneAwareReplication:
+            enabled: false
+        
+        overrides_exporter:
+          enabled: false
+        
+        querier:
+          replicas: 1
+        
+        query_frontend:
+          replicas: 1
+        
+        query_scheduler:
+          enabled: false
+        
+        ruler:
+          enabled: false
+        
+        store_gateway:
+          replicas: 1
+          persistentVolume:
+            enabled: true
+            size: 20Gi
+          zoneAwareReplication:
+            enabled: false
+        
+        # Nginx gateway
+        nginx:
+          enabled: true
+          replicas: 1
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+            hosts:
+              - host: mimir.aleklab.com
+                paths:
+                  - path: /
+                    pathType: Prefix
+            tls:
+              - secretName: mimir-tls
+                hosts:
+                  - mimir.aleklab.com
+        
+        # Disable minio and rollout operator
+        rollout_operator:
+          enabled: false
+        minio:
+          enabled: false
+        
+        # Enable monitoring
+        metaMonitoring:
+          serviceMonitor:
+            enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mimir
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

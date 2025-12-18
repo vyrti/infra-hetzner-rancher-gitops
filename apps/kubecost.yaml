@@ -1,0 +1,52 @@
+# Kubecost - Kubernetes cost monitoring
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubecost
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: https://kubecost.github.io/cost-analyzer/
+    targetRevision: 3.0.6
+    chart: cost-analyzer
+    helm:
+      values: |
+        kubecostToken: ""  # Optional: Get free token at kubecost.com
+        ingress:
+          enabled: true
+          className: traefik
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.tls: "true"
+          hosts:
+            - kubecost.aleklab.com
+          tls:
+            - secretName: kubecost-tls
+              hosts:
+                - kubecost.aleklab.com
+        prometheus:
+          server:
+            enabled: false
+          kubeStateMetrics:
+            enabled: false
+          nodeExporter:
+            enabled: false
+        global:
+          prometheus:
+            enabled: true
+            fqdn: http://mimir-nginx.mimir.svc.cluster.local:80/prometheus
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubecost
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,47 @@
+# OpenBao - Open source secrets management (HashiCorp Vault fork)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openbao
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: https://openbao.github.io/openbao-helm
+    targetRevision: 0.21.2
+    chart: openbao
+    helm:
+      values: |
+        server:
+          dev:
+            enabled: true  # Dev mode for easy setup; disable for production
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+            hosts:
+              - host: vault.aleklab.com
+            tls:
+              - secretName: openbao-tls
+                hosts:
+                  - vault.aleklab.com
+        ui:
+          enabled: true
+        injector:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openbao
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

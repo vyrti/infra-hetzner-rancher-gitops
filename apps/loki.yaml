@@ -1,0 +1,98 @@
+# Loki - Log aggregation system
+# Single binary mode for simplicity
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 6.49.0
+    chart: loki
+    helm:
+      values: |
+        deploymentMode: SingleBinary
+        
+        loki:
+          auth_enabled: false
+          
+          commonConfig:
+            replication_factor: 1
+          
+          storage:
+            type: filesystem
+          
+          schemaConfig:
+            configs:
+              - from: "2024-01-01"
+                store: tsdb
+                object_store: filesystem
+                schema: v13
+                index:
+                  prefix: loki_index_
+                  period: 24h
+          
+          limits_config:
+            ingestion_rate_mb: 10
+            ingestion_burst_size_mb: 20
+            max_streams_per_user: 10000
+            max_global_streams_per_user: 10000
+        
+        singleBinary:
+          replicas: 1
+          persistence:
+            enabled: true
+            size: 20Gi
+        
+        # Gateway for ingress
+        gateway:
+          enabled: true
+          replicas: 1
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+            hosts:
+              - host: loki.aleklab.com
+                paths:
+                  - path: /
+                    pathType: Prefix
+            tls:
+              - secretName: loki-tls
+                hosts:
+                  - loki.aleklab.com
+        
+        # Disable distributed components
+        read:
+          replicas: 0
+        write:
+          replicas: 0
+        backend:
+          replicas: 0
+        
+        # Enable monitoring
+        monitoring:
+          serviceMonitor:
+            enabled: true
+          selfMonitoring:
+            enabled: false
+            grafanaAgent:
+              installOperator: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

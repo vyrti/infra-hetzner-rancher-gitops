@@ -1,0 +1,38 @@
+# Trivy Operator - Kubernetes-native security scanning
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: trivy-operator
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: https://aquasecurity.github.io/helm-charts/
+    targetRevision: 0.20.1
+    chart: trivy-operator
+    helm:
+      values: |
+        trivy:
+          ignoreUnfixed: true
+        operator:
+          scannerReportTTL: "24h"
+          vulnerabilityScannerEnabled: true
+          configAuditScannerEnabled: true
+          rbacAssessmentScannerEnabled: true
+          infraAssessmentScannerEnabled: true
+          clusterComplianceEnabled: true
+        serviceMonitor:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: trivy-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

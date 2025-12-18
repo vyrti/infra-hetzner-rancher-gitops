@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  source:
+    repoURL: https://charts.gitlab.io
+    targetRevision: 9.6.2
+    chart: gitlab
+    helm:
+      values: |
+        global:
+          hosts:
+            domain: aleklab.com
+            gitlab: gitlab
+            https: true
+          ingress:
+            class: traefik
+            configureCertmanager: false
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+            tls:
+              enabled: true
+              secretName: gitlab-tls
+        certmanager:
+          install: false
+        prometheus:
+          install: false
+        gitlab-runner:
+          install: false
+        gitlab:
+          webservice:
+            minReplicas: 1
+            maxReplicas: 2
+          sidekiq:
+            minReplicas: 1
+            maxReplicas: 2
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gitlab
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

@@ -1,0 +1,58 @@
+# Kube-State-Metrics - Kubernetes object metrics
+# Provides metrics about Kubernetes objects (pods, deployments, etc.)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-state-metrics
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 7.0.0
+    chart: kube-state-metrics
+    helm:
+      values: |
+        # Enable all collectors
+        collectors:
+          - certificatesigningrequests
+          - configmaps
+          - cronjobs
+          - daemonsets
+          - deployments
+          - endpoints
+          - horizontalpodautoscalers
+          - ingresses
+          - jobs
+          - leases
+          - limitranges
+          - mutatingwebhookconfigurations
+          - namespaces
+          - networkpolicies
+          - nodes
+          - persistentvolumeclaims
+          - persistentvolumes
+          - poddisruptionbudgets
+          - pods
+          - replicasets
+          - replicationcontrollers
+          - resourcequotas
+          - secrets
+          - services
+          - statefulsets
+          - storageclasses
+          - validatingwebhookconfigurations
+          - volumeattachments
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -29,11 +29,11 @@ spec:
                   access_key_id: mimir
                   secret_access_key: mimir
                   insecure: true
-                  bucket_name: mimir-blocks
+                  bucket_name: mimir-tsdb
             blocks_storage:
               backend: s3
               s3:
-                bucket_name: mimir-blocks
+                bucket_name: mimir-tsdb
             ruler_storage:
               backend: s3
               s3:

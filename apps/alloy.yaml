@@ -287,9 +287,18 @@ spec:
                 }
               }
               
+              prometheus.relabel "node_exporter" {
+                forward_to = [prometheus.remote_write.mimir.receiver]
+                
+                rule {
+                  source_labels = ["node"]
+                  target_label  = "instance"
+                }
+              }
+              
               prometheus.scrape "node_exporter" {
                 targets    = discovery.relabel.node_exporter.output
-                forward_to = [prometheus.remote_write.mimir.receiver]
+                forward_to = [prometheus.relabel.node_exporter.receiver]
                 clustering {
                   enabled = true
                 }

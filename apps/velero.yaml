@@ -1,5 +1,5 @@
 # Velero - Kubernetes Backup and Disaster Recovery
-# Uses built-in MinIO for S3-compatible backup storage
+# Uses Helm chart 11.2.0 with Velero v1.17.1
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -17,9 +17,21 @@ spec:
     chart: velero
     helm:
       values: |
-        # Use MinIO for backup storage (included with Velero chart)
-        deployNodeAgent: true
-        
+        ## Configuration settings that directly affect the Velero deployment YAML.
+        image:
+          repository: velero/velero
+          tag: v1.17.1
+
+        # Init containers to add to the Velero deployment's pod spec.
+        # AWS plugin is required for S3-compatible (MinIO) storage.
+        initContainers:
+          - name: velero-plugin-for-aws
+            image: velero/velero-plugin-for-aws:v1.13.1
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - mountPath: /target
+                name: plugins
+
         # Velero configuration
         configuration:
           backupStorageLocation:
@@ -39,10 +51,10 @@ spec:
           defaultBackupTTL: 720h
           # Enable CSI snapshots
           features: EnableCSI
-          # Namespace filter (backup all by default)
-          defaultVolumesToFsBackup: true
+          # Use Kopia for filesystem backups (v1.14+ default)
+          uploaderType: kopia
 
-        # Credentials for MinIO (auto-generated secret)
+        # Credentials for MinIO
         credentials:
           useSecret: true
           name: velero-credentials
@@ -52,15 +64,17 @@ spec:
               aws_access_key_id = minio
               aws_secret_access_key = minio123
 
-        # Enable MinIO sub-chart for local S3 storage
-        deployBackupStorageLocation: true
-        
+        # Set true for backup all pod volumes without having to apply annotation
+        defaultVolumesToFsBackup: true
+
+        # Whether to deploy the node-agent daemonset (replaces restic in newer versions)
+        deployNodeAgent: true
+
         # Schedule default backups
         schedules:
           daily-backup:
             disabled: false
             schedule: "0 3 * * *"  # Daily at 3 AM
-            useOwnerReferencesInBackup: false
             template:
               ttl: 168h  # 7 days retention
               includedNamespaces:
@@ -69,12 +83,9 @@ spec:
                 - monitoring
                 - kubecost
               storageLocation: default
-              volumeSnapshotLocations:
-                - default
           weekly-full-backup:
             disabled: false
             schedule: "0 4 * * 0"  # Sunday at 4 AM
-            useOwnerReferencesInBackup: false
             template:
               ttl: 720h  # 30 days retention
               includedNamespaces:
@@ -84,11 +95,11 @@ spec:
                 - kube-public
               storageLocation: default
 
-        # Resource limits
+        # Resource limits for Velero server
         resources:
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 200m
+            memory: 256Mi
           limits:
             cpu: 1000m
             memory: 512Mi
@@ -98,7 +109,7 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 128Mi
+              memory: 256Mi
             limits:
               cpu: 1000m
               memory: 1Gi
@@ -108,6 +119,93 @@ spec:
           enabled: true
           serviceMonitor:
             enabled: true
+
+        # Extra objects to deploy a small MinIO for Velero storage
+        extraObjects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: velero-minio
+              namespace: velero
+            spec:
+              replicas: 1
+              selector:
+                matchLabels:
+                  app: minio
+              template:
+                metadata:
+                  labels:
+                    app: minio
+                spec:
+                  containers:
+                  - name: minio
+                    image: minio/minio:latest
+                    args:
+                    - server
+                    - /data
+                    - --console-address
+                    - :9001
+                    env:
+                    - name: MINIO_ROOT_USER
+                      value: minio
+                    - name: MINIO_ROOT_PASSWORD
+                      value: minio123
+                    ports:
+                    - containerPort: 9000
+                    - containerPort: 9001
+                    volumeMounts:
+                    - name: storage
+                      mountPath: /data
+                  volumes:
+                  - name: storage
+                    persistentVolumeClaim:
+                      claimName: velero-minio-pvc
+          - apiVersion: v1
+            kind: Service
+            metadata:
+              name: velero-minio
+              namespace: velero
+            spec:
+              type: ClusterIP
+              ports:
+                - port: 9000
+                  targetPort: 9000
+                  name: api
+                - port: 9001
+                  targetPort: 9001
+                  name: console
+              selector:
+                app: minio
+          - apiVersion: v1
+            kind: PersistentVolumeClaim
+            metadata:
+              name: velero-minio-pvc
+              namespace: velero
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 20Gi
+          - apiVersion: batch/v1
+            kind: Job
+            metadata:
+              name: velero-minio-init
+              namespace: velero
+            spec:
+              template:
+                spec:
+                  containers:
+                  - name: mc
+                    image: minio/mc:latest
+                    command:
+                    - /bin/sh
+                    - -c
+                    - |
+                      until (mc alias set minio http://velero-minio:9000 minio minio123); do echo 'waiting for minio...'; sleep 1; done;
+                      mc mb --ignore-existing minio/velero-backups;
+                      exit 0;
+                  restartPolicy: OnFailure
 
   destination:
     server: https://kubernetes.default.svc

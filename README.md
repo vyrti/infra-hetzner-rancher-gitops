@@ -31,7 +31,7 @@ kubectl apply -f ../gitops/root.yaml
 | **Istio** | 1.24.2 | istio-system |
 | **OpenBao** | 0.9.0 | openbao |
 | **GitLab** | 9.6.2 | gitlab |
-| **Velero** | 8.2.0 | velero |
+| **Velero** | 11.2.0 | velero |
 
 ## Monitoring Architecture
 

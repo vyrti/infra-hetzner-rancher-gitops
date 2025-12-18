@@ -17,7 +17,7 @@ spec:
     helm:
       values: |
         global:
-          imageRegistry: ghcr.io
+          imageRegistry: quay.io
         
         ingress:
           enabled: true

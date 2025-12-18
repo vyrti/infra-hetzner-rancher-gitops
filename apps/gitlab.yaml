@@ -18,7 +18,8 @@ spec:
         global:
           hosts:
             domain: aleklab.com
-            gitlab: gitlab
+            gitlab:
+              name: gitlab.aleklab.com
             https: true
           ingress:
             class: traefik
@@ -30,7 +31,10 @@ spec:
             tls:
               enabled: true
               secretName: gitlab-tls
+        certmanager-issuer:
+          email: admin@aleklab.com
         certmanager:
+          installCRDs: false
           install: false
         prometheus:
           install: false

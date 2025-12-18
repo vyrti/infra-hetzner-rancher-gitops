@@ -49,9 +49,9 @@ spec:
           enabled: true
           size: 20Gi
         
-        # Enable service monitor
+        # Disable service monitor (no prometheus-operator CRDs)
         serviceMonitor:
-          enabled: true
+          enabled: false
         
         # Resource limits
         resources:

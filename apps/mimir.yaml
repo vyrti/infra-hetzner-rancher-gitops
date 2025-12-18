@@ -108,10 +108,10 @@ spec:
         minio:
           enabled: false
         
-        # Enable monitoring
+        # Disable monitoring (no prometheus-operator CRDs)
         metaMonitoring:
           serviceMonitor:
-            enabled: true
+            enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: mimir

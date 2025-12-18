@@ -79,10 +79,10 @@ spec:
         backend:
           replicas: 0
         
-        # Enable monitoring
+        # Disable monitoring (no prometheus-operator CRDs)
         monitoring:
           serviceMonitor:
-            enabled: true
+            enabled: false
           selfMonitoring:
             enabled: false
             grafanaAgent:

@@ -54,6 +54,8 @@ spec:
         gateway:
           enabled: true
           replicas: 1
+          nginxConfig:
+            resolver: rke2-coredns-rke2-coredns.kube-system.svc.cluster.local
           ingress:
             enabled: true
             ingressClassName: traefik

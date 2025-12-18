@@ -179,21 +179,6 @@ Wait for a pod to become ready during a script or manual rollout.
 kubectl wait --for=condition=ready pod -n monitoring -l app.kubernetes.io/name=grafana --timeout=120s
 ```
 
----
-
-## 7. Missing Dashboard Data
-
-### Investigating Empty Dashboards
-If a specific dashboard (e.g., ArgoCD) is empty, Alloy might not be scraping those metrics.
-1. **Identify the Metrics Port**: Find the Service or Endpoint exposing metrics.
-   ```bash
-   kubectl get svc -n argocd
-   kubectl get endpoints -n argocd
-   
-   # Check specific port names
-   kubectl get endpoints -n argocd argocd-metrics -o jsonpath='{.subsets[*].ports}'
-   ```
-2. **Update Alloy Config**: Add a `discovery.relabel` and `prometheus.scrape` job to `alloy.yaml` targeting that namespace and port name.
 
 
 

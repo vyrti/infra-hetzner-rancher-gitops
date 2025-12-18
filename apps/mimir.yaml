@@ -65,7 +65,7 @@ spec:
           replicas: 1
           persistentVolume:
             enabled: true
-            size: 20Gi
+            size: 3Gi
         
         distributor:
           replicas: 1
@@ -74,7 +74,7 @@ spec:
           replicas: 1
           persistentVolume:
             enabled: true
-            size: 20Gi
+            size: 3Gi
           zoneAwareReplication:
             enabled: false
         
@@ -97,7 +97,7 @@ spec:
           replicas: 1
           persistentVolume:
             enabled: true
-            size: 20Gi
+            size: 3Gi
           zoneAwareReplication:
             enabled: false
         
@@ -128,7 +128,7 @@ spec:
         minio:
           enabled: true
           persistence:
-            size: 20Gi
+            size: 3Gi
         
         rollout_operator:
           enabled: false

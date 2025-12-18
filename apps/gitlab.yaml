@@ -44,11 +44,16 @@ spec:
             ingress:
               tls:
                 secretName: gitlab-kas-tls
+          gitaly:
+            persistence:
+              size: 2Gi
         registry:
           ingress:
             tls:
               secretName: gitlab-registry-tls
         minio:
+          persistence:
+            size: 2Gi
           ingress:
             tls:
               secretName: gitlab-minio-tls
@@ -64,6 +69,12 @@ spec:
           install: false
         postgresql:
           install: true
+          persistence:
+            size: 1Gi
+        redis:
+          master:
+            persistence:
+              size: 1Gi
 
   destination:
     server: https://kubernetes.default.svc

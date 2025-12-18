@@ -61,6 +61,8 @@ spec:
         # Enable PostgreSQL subchart
         postgresql:
           enabled: true
+          persistence:
+            size: 1Gi
           global:
             postgresql:
               auth:

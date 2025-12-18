@@ -47,7 +47,7 @@ spec:
         
         persistence:
           enabled: true
-          size: 20Gi
+          size: 3Gi
         
         # Disable service monitor (no prometheus-operator CRDs)
         serviceMonitor:

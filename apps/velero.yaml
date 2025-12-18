@@ -186,7 +186,7 @@ spec:
                 - ReadWriteOnce
               resources:
                 requests:
-                  storage: 20Gi
+                  storage: 3Gi
           - apiVersion: batch/v1
             kind: Job
             metadata:

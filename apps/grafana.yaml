@@ -39,7 +39,7 @@ spec:
         
         persistence:
           enabled: true
-          size: 5Gi
+          size: 1Gi
         
         # Pre-configured datasources
         datasources:

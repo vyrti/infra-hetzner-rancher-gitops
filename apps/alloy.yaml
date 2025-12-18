@@ -166,7 +166,12 @@ spec:
                   regex         = "metrics|http-metrics.*|.*prom-metrics|monitoring|http-exporter-port"
                   action        = "keep"
                 }
-                
+
+                rule {
+                  source_labels = ["__meta_kubernetes_service_name"]
+                  target_label  = "job"
+                }
+
                 // Drop node-exporter (handled separately)
                 rule {
                   source_labels = ["__meta_kubernetes_service_name"]
@@ -174,13 +179,25 @@ spec:
                   action        = "drop"
                 }
 
+                // ArgoCD job name mapping (standardize for dashboards)
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_service_name"]
+                  regex         = "argocd;argocd-metrics"
+                  target_label  = "job"
+                  replacement   = "argocd-application-controller"
+                  action        = "replace"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_service_name"]
+                  regex         = "argocd;argocd-server-metrics"
+                  target_label  = "job"
+                  replacement   = "argocd-server"
+                  action        = "replace"
+                }
+
                 rule {
                   source_labels = ["__meta_kubernetes_namespace"]
                   target_label  = "namespace"
-                }
-                rule {
-                  source_labels = ["__meta_kubernetes_service_name"]
-                  target_label  = "job"
                 }
                 rule {
                   source_labels = ["__meta_kubernetes_pod_name"]
@@ -194,6 +211,39 @@ spec:
               
               prometheus.scrape "generic_endpoints" {
                 targets    = discovery.relabel.generic_endpoints.output
+                forward_to = [prometheus.remote_write.mimir.receiver]
+                scrape_interval = "30s"
+              }
+
+              // ============================================
+              // METRICS SCRAPING - TRAEFIK (Pod-based)
+              // ============================================
+              // Traefik service doesn't expose 9100, so we scrape pods directly
+              
+              discovery.relabel "traefik_pods" {
+                targets = discovery.kubernetes.pods.targets
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  regex         = "traefik"
+                  action        = "keep"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_container_port_name"]
+                  regex         = "metrics"
+                  action        = "keep"
+                }
+                rule {
+                  target_label  = "job"
+                  replacement   = "traefik"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_name"]
+                  target_label  = "pod"
+                }
+              }
+
+              prometheus.scrape "traefik" {
+                targets    = discovery.relabel.traefik_pods.output
                 forward_to = [prometheus.remote_write.mimir.receiver]
                 scrape_interval = "30s"
               }

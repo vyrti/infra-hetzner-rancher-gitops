@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://kubecost.github.io/cost-analyzer/
-    targetRevision: 2.9.5
+    targetRevision: 2.5.5
     chart: cost-analyzer
     helm:
       values: |
@@ -38,12 +38,9 @@ spec:
           nodeExporter:
             enabled: false
         global:
-          clusterId: "hetzner-rke2"
           prometheus:
             enabled: true
             fqdn: http://mimir-nginx.mimir.svc.cluster.local:80/prometheus
-        networkCosts:
-          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: kubecost

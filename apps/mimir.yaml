@@ -18,6 +18,14 @@ spec:
     helm:
       values: |
         # Minimal deployment for small clusters
+        kafka:
+          persistence:
+            size: 1Gi
+          image:
+            tag: 3.6.1-debian-11-r0
+        etcd:
+          persistence:
+            size: 1Gi
         mimir:
           auth_enabled: false
           structuredConfig:

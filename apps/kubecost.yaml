@@ -17,6 +17,10 @@ spec:
     helm:
       values: |
         kubecostToken: ""  # Optional: Get free token at kubecost.com
+        kubecostProductConfigs:
+          persistentVolume:
+            size: 3Gi
+            enabled: true
         ingress:
           enabled: true
           className: traefik

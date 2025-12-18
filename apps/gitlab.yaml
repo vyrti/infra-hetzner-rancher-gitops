@@ -71,6 +71,9 @@ spec:
           install: true
           persistence:
             size: 1Gi
+          primary:
+            persistence:
+              size: 1Gi
         redis:
           master:
             persistence:

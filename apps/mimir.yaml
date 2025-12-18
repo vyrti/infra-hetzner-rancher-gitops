@@ -43,6 +43,8 @@ spec:
         
         compactor:
           replicas: 1
+          extraArgs:
+            - "-compactor.data-dir=/data/compactor"
           persistentVolume:
             enabled: true
             size: 20Gi

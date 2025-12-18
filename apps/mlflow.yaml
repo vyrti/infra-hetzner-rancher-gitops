@@ -18,7 +18,7 @@ spec:
       values: |
         # Global Bitnami image configuration
         global:
-          imageRegistry: quay.io
+          imageRegistry: public.ecr.aws
           compatibility:
             openshift:
               adaptSecurityContext: auto
@@ -41,7 +41,7 @@ spec:
         minio:
           enabled: true
           image:
-            registry: quay.io
+            registry: public.ecr.aws
             repository: bitnami/minio
           auth:
             rootUser: minio
@@ -51,7 +51,7 @@ spec:
         postgresql:
           enabled: true
           image:
-            registry: quay.io
+            registry: public.ecr.aws
             repository: bitnami/postgresql
           auth:
             username: mlflow
@@ -60,7 +60,7 @@ spec:
         
         # Main MLflow image
         image:
-          registry: quay.io
+          registry: public.ecr.aws
           repository: bitnami/mlflow
           auth:
             enabled: false # Open access for simplicity (or configure basic auth)

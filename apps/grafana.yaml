@@ -45,7 +45,7 @@ spec:
             datasources:
               - name: Mimir
                 type: prometheus
-                url: http://mimir-nginx.mimir.svc.cluster.local:80/prometheus
+                url: http://mimir-gateway.mimir.svc.cluster.local:80/prometheus
                 access: proxy
                 isDefault: true  # Mimir is primary metrics source
               - name: Loki

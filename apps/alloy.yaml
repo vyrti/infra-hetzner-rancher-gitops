@@ -115,6 +115,43 @@ spec:
               }
               
               }
+
+              // ============================================
+              // METRICS SCRAPING - OPENBAO
+              // ============================================
+
+              discovery.relabel "openbao" {
+                targets = discovery.kubernetes.endpoints.targets
+                
+                rule {
+                  source_labels = ["__meta_kubernetes_service_name"]
+                  regex         = "openbao"
+                  action        = "keep"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_endpoint_port_name"]
+                  regex         = "http"
+                  action        = "keep"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  target_label  = "namespace"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_service_name"]
+                  target_label  = "job"
+                }
+              }
+
+              prometheus.scrape "openbao" {
+                targets    = discovery.relabel.openbao.output
+                forward_to = [prometheus.remote_write.mimir.receiver]
+                metrics_path = "/v1/sys/metrics"
+                params = {
+                  "format" = ["prometheus"],
+                }
+                scrape_interval = "30s"
+              }
               
               // ============================================
               // METRICS SCRAPING - GENERIC (Auto-Discovery)

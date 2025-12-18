@@ -30,18 +30,32 @@ spec:
               traefik.ingress.kubernetes.io/router.tls: "true"
             tls:
               enabled: true
-              secretName: gitlab-tls
-        prometheus:
-          install: false
-        gitlab-runner:
-          install: false
         gitlab:
           webservice:
             minReplicas: 1
             maxReplicas: 2
+            ingress:
+              tls:
+                secretName: gitlab-webservice-tls
           sidekiq:
             minReplicas: 1
             maxReplicas: 2
+          kas:
+            ingress:
+              tls:
+                secretName: gitlab-kas-tls
+        registry:
+          ingress:
+            tls:
+              secretName: gitlab-registry-tls
+        minio:
+          ingress:
+            tls:
+              secretName: gitlab-minio-tls
+        prometheus:
+          install: false
+        gitlab-runner:
+          install: false
         upgradeCheck:
           enabled: false
         nginx-ingress:
@@ -49,7 +63,7 @@ spec:
         certmanager:
           install: false
         postgresql:
-          install: true # Re-ensure it is installed if needed, though default is true
+          install: true
 
   destination:
     server: https://kubernetes.default.svc

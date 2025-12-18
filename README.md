@@ -148,11 +148,3 @@ kubectl -n openbao exec openbao-0 -- cat /vault/data/init.json 2>/dev/null || \
 1. Go to **Explore**
 2. Select **Tempo** as the datasource.
 3. Select **Query Type** > **Search** to find traces or specific Trace IDs.
-
-## Troubleshooting
-
-### "Too many open files" error
-For the monitoring stack to work correctly, the node's `fs.inotify` limits must be increased. This is handled automatically by the `sysctl-tuner` DaemonSet deployed in the `kube-system` namespace.
-- **Watches**: 524288
-- **Instances**: 8192
-

@@ -44,14 +44,17 @@ for file in dashboards_json/*.json; do
     BASENAME=$(basename "$file" .json)
     # Escape json for wrapping in yaml
     # We use kubectl create dry-run to handle escaping safely
+    # Create valid YAML with labels using perl for cross-platform safety
     kubectl create configmap "grafana-dashboard-${BASENAME}" \
         --from-file="${BASENAME}.json=${file}" \
-        --dry-run=client -o yaml | \
-    sed 's/creationTimestamp: null//' | \
-    sed '/metadata:/a\
-  labels:\
-    grafana_dashboard: "1"' >> dashboards-manifest.yaml
+        --dry-run=client -o yaml > temp_cm.yaml
+        
+    perl -i -pe 's/metadata:/metadata:\n  labels:\n    grafana_dashboard: "1"/' temp_cm.yaml
+    perl -i -pe 's/creationTimestamp: null//' temp_cm.yaml
+    
+    cat temp_cm.yaml >> dashboards-manifest.yaml
     echo "---" >> dashboards-manifest.yaml
+    rm temp_cm.yaml
 done
 
 echo "Cleaning up..."

@@ -4037,7 +4037,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-argocd
+    grafana_dashboard: "1"
+  name: grafana-dashboard-argocd
 ---
 apiVersion: v1
 data:
@@ -5350,7 +5351,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-cert-manager
+    grafana_dashboard: "1"
+  name: grafana-dashboard-cert-manager
 ---
 apiVersion: v1
 data:
@@ -8714,7 +8716,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-gitlab
+    grafana_dashboard: "1"
+  name: grafana-dashboard-gitlab
 ---
 apiVersion: v1
 data:
@@ -9501,7 +9504,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-istio-mesh
+    grafana_dashboard: "1"
+  name: grafana-dashboard-istio-mesh
 ---
 apiVersion: v1
 data:
@@ -10928,7 +10932,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-istio-service
+    grafana_dashboard: "1"
+  name: grafana-dashboard-istio-service
 ---
 apiVersion: v1
 data:
@@ -12337,7 +12342,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-kubernetes-cluster
+    grafana_dashboard: "1"
+  name: grafana-dashboard-kubernetes-cluster
 ---
 apiVersion: v1
 data:
@@ -12998,7 +13004,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-kubernetes-pods
+    grafana_dashboard: "1"
+  name: grafana-dashboard-kubernetes-pods
 ---
 apiVersion: v1
 data:
@@ -13290,7 +13297,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-logs-app
+    grafana_dashboard: "1"
+  name: grafana-dashboard-logs-app
 ---
 apiVersion: v1
 data:
@@ -13298,12 +13306,13 @@ data:
     {
       "code": "NotFound",
       "message": "dashboard not found",
-      "requestId": "90e4bc01-70d5-4202-9f0a-146da828e257"
+      "requestId": "b2236d3b-1439-41b8-a676-1a3f4592e4bc"
     }
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-mimir-overview
+    grafana_dashboard: "1"
+  name: grafana-dashboard-mimir-overview
 ---
 apiVersion: v1
 data:
@@ -17016,7 +17025,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-minio
+    grafana_dashboard: "1"
+  name: grafana-dashboard-minio
 ---
 apiVersion: v1
 data:
@@ -32790,7 +32800,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-node-exporter
+    grafana_dashboard: "1"
+  name: grafana-dashboard-node-exporter
 ---
 apiVersion: v1
 data:
@@ -35965,7 +35976,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-postgresql
+    grafana_dashboard: "1"
+  name: grafana-dashboard-postgresql
 ---
 apiVersion: v1
 data:
@@ -37599,7 +37611,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-redis
+    grafana_dashboard: "1"
+  name: grafana-dashboard-redis
 ---
 apiVersion: v1
 data:
@@ -39177,5 +39190,6 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    grafana_dashboard: "1"  name: grafana-dashboard-traefik
+    grafana_dashboard: "1"
+  name: grafana-dashboard-traefik
 ---

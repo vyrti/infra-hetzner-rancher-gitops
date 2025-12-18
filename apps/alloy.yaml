@@ -115,6 +115,35 @@ spec:
               }
               
               // ============================================
+              // METRICS SCRAPING - ARGOCD
+              // ============================================
+              
+              discovery.relabel "argocd" {
+                targets = discovery.kubernetes.endpoints.targets
+                
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  regex         = "argocd"
+                  action        = "keep"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_endpoint_port_name"]
+                  regex         = "metrics|http-exporter-port"
+                  action        = "keep"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_service_name"]
+                  target_label  = "job"
+                }
+              }
+              
+              prometheus.scrape "argocd" {
+                targets    = discovery.relabel.argocd.output
+                forward_to = [prometheus.remote_write.mimir.receiver]
+                scrape_interval = "30s"
+              }
+              
+              // ============================================
               // METRICS SCRAPING - NODE EXPORTER
               // ============================================
               

@@ -30,10 +30,7 @@ spec:
                   secret_access_key: mimir
                   insecure: true
                   bucket_name: mimir-tsdb
-            blocks_storage:
-              backend: s3
-              s3:
-                bucket_name: mimir-tsdb
+
             ruler_storage:
               backend: s3
               s3:
@@ -45,6 +42,12 @@ spec:
               ingestion_burst_size: 100000
             compactor:
               data_dir: /data/compactor
+            ingester:
+              ring:
+                replication_factor: 1
+            store_gateway:
+              sharding_ring:
+                replication_factor: 1
         
         # Deployment components
         alertmanager:

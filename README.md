@@ -127,13 +127,13 @@ kubectl -n openbao exec openbao-0 -- cat /vault/data/init.json 2>/dev/null || \
 
 ### 📊 Viewing Dashboards
 1. Login to **Grafana** (https://grafana.aleklab.com)
-2. Go to **Dashboards** > **Browse**
-3. Select a dashboard from the list:
-   - **Kubernetes / Compute Resources / Cluster**: Overall cluster CPU/Memory/Network usage.
-   - **Kubernetes / Compute Resources / Pods**: Detailed metrics per Pod.
-   - **Nodes**: Hardware metrics (Disk, Memory, CPU) for each node.
-   - **Traefik**: Ingress controller traffic stats.
-   - **Logs App**: Quick view of logs (Loki).
+2. Go to **Dashboards** > **Browse**. You will see dashboards for:
+   - **Cluster**: Kubernetes Cluster, Nodes, Pods
+   - **Network**: Traefik (Ingress), Istio Mesh & Services
+   - **Apps**: ArgoCD, GitLab, Cert-Manager
+   - **Data**: PostgreSQL, Redis, MinIO
+   - **Observability**: Mimir Overview, Logs (Loki)
+
 
 ### 🔍 Viewing Logs (Loki)
 1. Go to **Explore** (Compass icon on the left)

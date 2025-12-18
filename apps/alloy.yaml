@@ -114,31 +114,49 @@ spec:
                 scrape_interval = "30s"
               }
               
-              // ============================================
-              // METRICS SCRAPING - ARGOCD
-              // ============================================
+              }
               
-              discovery.relabel "argocd" {
+              // ============================================
+              // METRICS SCRAPING - GENERIC (Auto-Discovery)
+              // ============================================
+              // Scrapes any service with a port named 'metrics', 'http-metrics', etc.
+              
+              discovery.relabel "generic_endpoints" {
                 targets = discovery.kubernetes.endpoints.targets
                 
                 rule {
-                  source_labels = ["__meta_kubernetes_namespace"]
-                  regex         = "argocd"
+                  source_labels = ["__meta_kubernetes_endpoint_port_name"]
+                  regex         = "metrics|http-metrics.*|.*prom-metrics|monitoring|http-exporter-port"
                   action        = "keep"
                 }
+                
+                // Drop node-exporter (handled separately)
                 rule {
-                  source_labels = ["__meta_kubernetes_endpoint_port_name"]
-                  regex         = "metrics|http-exporter-port"
-                  action        = "keep"
+                  source_labels = ["__meta_kubernetes_service_name"]
+                  regex         = ".*node-exporter.*"
+                  action        = "drop"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  target_label  = "namespace"
                 }
                 rule {
                   source_labels = ["__meta_kubernetes_service_name"]
                   target_label  = "job"
                 }
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_name"]
+                  target_label  = "pod"
+                }
+                rule {
+                  source_labels = ["__meta_kubernetes_endpoint_node_name"]
+                  target_label  = "node"
+                }
               }
               
-              prometheus.scrape "argocd" {
-                targets    = discovery.relabel.argocd.output
+              prometheus.scrape "generic_endpoints" {
+                targets    = discovery.relabel.generic_endpoints.output
                 forward_to = [prometheus.remote_write.mimir.receiver]
                 scrape_interval = "30s"
               }

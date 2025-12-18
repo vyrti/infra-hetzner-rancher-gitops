@@ -122,3 +122,29 @@ kubectl -n openbao exec openbao-0 -- cat /vault/data/init.json 2>/dev/null || \
 # No authentication by default (internal services)
 # Accessed through Grafana data sources
 ```
+
+## Observability Guide
+
+### 📊 Viewing Dashboards
+1. Login to **Grafana** (https://grafana.aleklab.com)
+2. Go to **Dashboards** > **Browse**
+3. Select a dashboard from the list:
+   - **Kubernetes / Compute Resources / Cluster**: Overall cluster CPU/Memory/Network usage.
+   - **Kubernetes / Compute Resources / Pods**: Detailed metrics per Pod.
+   - **Nodes**: Hardware metrics (Disk, Memory, CPU) for each node.
+   - **Traefik**: Ingress controller traffic stats.
+   - **Logs App**: Quick view of logs (Loki).
+
+### 🔍 Viewing Logs (Loki)
+1. Go to **Explore** (Compass icon on the left)
+2. Select **Loki** as the datasource at the top-left.
+3. Use the **Label Browser** or enter a LogQL query:
+   - **View logs for a specific pod**: `{pod="<pod-name>"}`
+   - **View logs for a namespace**: `{namespace="<namespace>"}`
+   - **Search for errors**: `{namespace="gitlab"} |= "error"`
+4. Click **Run Query** (top right) to see the live stream.
+
+### 📉 Distributed Tracing (Tempo)
+1. Go to **Explore**
+2. Select **Tempo** as the datasource.
+3. Select **Query Type** > **Search** to find traces or specific Trace IDs.

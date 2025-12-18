@@ -109,6 +109,38 @@ spec:
               gnetId: 11001
               revision: 1
               datasource: Mimir
+            argocd:
+              gnetId: 14584
+              revision: 1
+              datasource: Mimir
+            gitlab:
+              gnetId: 15682
+              revision: 1
+              datasource: Mimir
+            postgresql:
+              gnetId: 9628
+              revision: 1
+              datasource: Mimir
+            redis:
+              gnetId: 763
+              revision: 1
+              datasource: Mimir
+            minio:
+              gnetId: 13502
+              revision: 1
+              datasource: Mimir
+            istio-mesh:
+              gnetId: 7639
+              revision: 1
+              datasource: Mimir
+            istio-service:
+              gnetId: 7636
+              revision: 1
+              datasource: Mimir
+            mimir-overview:
+              gnetId: 17462
+              revision: 1
+              datasource: Mimir
         
         # Sidecar for configmap dashboards
         sidecar:

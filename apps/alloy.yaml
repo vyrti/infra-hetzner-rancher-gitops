@@ -380,6 +380,10 @@ spec:
                 endpoint {
                   url = "http://mimir-gateway.mimir.svc.cluster.local:80/api/v1/push"
                 }
+
+                external_labels = {
+                  cluster = "hetzner-cluster",
+                }
               }
               
               // ============================================

@@ -36,6 +36,9 @@ spec:
         # Use integrated MinIO for artifact storage
         minio:
           enabled: true
+          image:
+            registry: quay.io
+            repository: bitnami/minio
           auth:
             rootUser: minio
             rootPassword: minio123
@@ -43,6 +46,9 @@ spec:
         # Use integrated PostgreSQL for tracking server
         postgresql:
           enabled: true
+          image:
+            registry: quay.io
+            repository: bitnami/postgresql
           auth:
             username: mlflow
             password: mlflow123

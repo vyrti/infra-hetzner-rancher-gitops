@@ -15,7 +15,7 @@ export KUBECONFIG=$(pwd)/rke2.yaml
 kubectl apply -f ../gitops/root.yaml
 ```
 
-## Applications (13 apps)
+## Applications (14 apps)
 
 | App | Version | Namespace |
 |-----|---------|-----------|
@@ -30,7 +30,8 @@ kubectl apply -f ../gitops/root.yaml
 | **Trivy** | 0.31.0 | trivy-system |
 | **Istio** | 1.24.2 | istio-system |
 | **OpenBao** | 0.9.0 | openbao |
-| **GitLab** | 9.6.1 | gitlab |
+| **GitLab** | 9.6.2 | gitlab |
+| **Velero** | 8.2.0 | velero |
 
 ## Monitoring Architecture
 
@@ -83,7 +84,7 @@ kubectl apply -f ../gitops/root.yaml
 ```bash
 # Username: admin
 # Get bootstrap password (first login only)
-kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
+kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\\n"}}'
 ```
 
 ### ArgoCD
@@ -148,3 +149,126 @@ kubectl -n openbao exec openbao-0 -- cat /vault/data/init.json 2>/dev/null || \
 1. Go to **Explore**
 2. Select **Tempo** as the datasource.
 3. Select **Query Type** > **Search** to find traces or specific Trace IDs.
+
+---
+
+## 💾 Velero Backup & Restore Guide
+
+Velero provides backup and disaster recovery for Kubernetes resources and persistent volumes.
+
+### Automated Backup Schedules
+
+| Schedule | Time | Retention | Namespaces |
+|----------|------|-----------|------------|
+| **Daily** | 3:00 AM | 7 days | gitlab, openbao, monitoring, kubecost |
+| **Weekly Full** | Sunday 4:00 AM | 30 days | All (except kube-system) |
+
+### Install Velero CLI
+
+```bash
+# macOS
+brew install velero
+
+# Linux
+wget https://github.com/vmware-tanzu/velero/releases/download/v1.16.0/velero-v1.16.0-linux-amd64.tar.gz
+tar -xvf velero-v1.16.0-linux-amd64.tar.gz
+sudo mv velero-v1.16.0-linux-amd64/velero /usr/local/bin/
+```
+
+### Common Velero Commands
+
+```bash
+# View all backups
+velero backup get
+
+# View backup details
+velero backup describe <backup-name> --details
+
+# View scheduled backups
+velero schedule get
+
+# View backup logs
+velero backup logs <backup-name>
+```
+
+### Create Manual Backup
+
+```bash
+# Backup a specific namespace
+velero backup create gitlab-backup --include-namespaces gitlab --wait
+
+# Backup multiple namespaces
+velero backup create full-backup --include-namespaces gitlab,openbao,monitoring
+
+# Backup with specific resources only
+velero backup create secrets-backup --include-resources secrets --include-namespaces gitlab
+
+# Backup entire cluster (excluding system namespaces)
+velero backup create cluster-backup --exclude-namespaces kube-system,kube-public
+```
+
+### Restore from Backup
+
+```bash
+# List available backups
+velero backup get
+
+# Restore entire backup to original namespaces
+velero restore create --from-backup <backup-name>
+
+# Restore to a different namespace (useful for testing)
+velero restore create --from-backup gitlab-backup --namespace-mappings gitlab:gitlab-restore
+
+# Restore specific resources only
+velero restore create --from-backup <backup-name> --include-resources deployments,configmaps
+
+# Check restore status
+velero restore get
+velero restore describe <restore-name>
+```
+
+### Disaster Recovery Scenarios
+
+#### Scenario 1: Recover a deleted namespace
+```bash
+# 1. Find the most recent backup containing the namespace
+velero backup get
+
+# 2. Restore it
+velero restore create --from-backup daily-backup-<timestamp> --include-namespaces gitlab
+```
+
+#### Scenario 2: Migrate to a new cluster
+```bash
+# On OLD cluster: Create a final backup
+velero backup create migration-backup --exclude-namespaces kube-system
+
+# On NEW cluster: Install Velero with same storage config, then restore
+velero restore create --from-backup migration-backup
+```
+
+#### Scenario 3: Rollback after failed upgrade
+```bash
+# 1. Before upgrade, create a backup
+velero backup create pre-upgrade-gitlab --include-namespaces gitlab
+
+# 2. If upgrade fails, delete the namespace and restore
+kubectl delete namespace gitlab
+velero restore create --from-backup pre-upgrade-gitlab
+```
+
+### Troubleshooting
+
+```bash
+# Check Velero pod status
+kubectl get pods -n velero
+
+# View Velero logs
+kubectl logs -n velero deployment/velero
+
+# Check backup storage location status
+velero backup-location get
+
+# Verify MinIO storage is accessible
+kubectl exec -n velero deployment/velero -- velero backup-location get
+```

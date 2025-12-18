@@ -1,0 +1,121 @@
+# Velero - Kubernetes Backup and Disaster Recovery
+# Uses built-in MinIO for S3-compatible backup storage
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: velero
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  source:
+    repoURL: https://vmware-tanzu.github.io/helm-charts
+    targetRevision: 11.2.0
+    chart: velero
+    helm:
+      values: |
+        # Use MinIO for backup storage (included with Velero chart)
+        deployNodeAgent: true
+        
+        # Velero configuration
+        configuration:
+          backupStorageLocation:
+            - name: default
+              provider: aws
+              bucket: velero-backups
+              config:
+                region: minio
+                s3ForcePathStyle: "true"
+                s3Url: http://velero-minio:9000
+          volumeSnapshotLocation:
+            - name: default
+              provider: aws
+              config:
+                region: minio
+          # Default backup TTL (30 days)
+          defaultBackupTTL: 720h
+          # Enable CSI snapshots
+          features: EnableCSI
+          # Namespace filter (backup all by default)
+          defaultVolumesToFsBackup: true
+
+        # Credentials for MinIO (auto-generated secret)
+        credentials:
+          useSecret: true
+          name: velero-credentials
+          secretContents:
+            cloud: |
+              [default]
+              aws_access_key_id = minio
+              aws_secret_access_key = minio123
+
+        # Enable MinIO sub-chart for local S3 storage
+        deployBackupStorageLocation: true
+        
+        # Schedule default backups
+        schedules:
+          daily-backup:
+            disabled: false
+            schedule: "0 3 * * *"  # Daily at 3 AM
+            useOwnerReferencesInBackup: false
+            template:
+              ttl: 168h  # 7 days retention
+              includedNamespaces:
+                - gitlab
+                - openbao
+                - monitoring
+                - kubecost
+              storageLocation: default
+              volumeSnapshotLocations:
+                - default
+          weekly-full-backup:
+            disabled: false
+            schedule: "0 4 * * 0"  # Sunday at 4 AM
+            useOwnerReferencesInBackup: false
+            template:
+              ttl: 720h  # 30 days retention
+              includedNamespaces:
+                - "*"
+              excludedNamespaces:
+                - kube-system
+                - kube-public
+              storageLocation: default
+
+        # Resource limits
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+
+        # Node agent (for filesystem backups)
+        nodeAgent:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+
+        # Prometheus metrics
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: velero
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

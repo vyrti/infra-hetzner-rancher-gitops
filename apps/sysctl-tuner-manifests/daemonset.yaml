@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: sysctl-tuner
+  namespace: kube-system
+  labels:
+    app: sysctl-tuner
+spec:
+  selector:
+    matchLabels:
+      app: sysctl-tuner
+  template:
+    metadata:
+      labels:
+        app: sysctl-tuner
+    spec:
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      containers:
+      - name: sysctl-tuner
+        image: busybox:latest
+        command:
+        - sh
+        - -c
+        - |
+          sysctl -w fs.inotify.max_user_watches=524288
+          sysctl -w fs.inotify.max_user_instances=8192
+          echo "Sysctl tuning completed. Sleeping..."
+          sleep infinity
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 50Mi

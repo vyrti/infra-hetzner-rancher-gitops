@@ -11,64 +11,62 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 5.1.17
+    repoURL: https://community-charts.github.io/helm-charts
+    targetRevision: 0.4.12 # Using a known stable recent version
     chart: mlflow
     helm:
       values: |
-        # Global Bitnami image configuration
-        global:
-          imageRegistry: public.ecr.aws
-          compatibility:
-            openshift:
-              adaptSecurityContext: auto
-        
         ingress:
           enabled: true
-          ingressClassName: traefik
-          hostname: mlflow.aleklab.com
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
-            traefik.ingress.kubernetes.io/router.entrypoints: websecure
-            traefik.ingress.kubernetes.io/router.tls: "true"
-          tls: true
-          extraTls:
-            - hosts:
+          className: traefik
+          hosts:
+            - host: mlflow.aleklab.com
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls:
+            - secretName: mlflow-tls
+              hosts:
                 - mlflow.aleklab.com
-              secretName: mlflow-tls
 
-        # Use integrated MinIO for artifact storage
+        # Artifact Storage (S3)
+        # Using existing Velero MinIO instance
+        artifactRoot:
+          s3:
+            enabled: true
+            bucket: mlflow
+            awsAccessKeyId: minio
+            awsSecretAccessKey: minio123
+
+        # Environment variables to point to Velero MinIO
+        extraEnvVars:
+          MLFLOW_S3_ENDPOINT_URL: http://velero-minio.velero.svc:9000
+          MLFLOW_S3_IGNORE_TLS: "true"
+
+        # Backend Storage (PostgreSQL)
+        backendStore:
+          postgres:
+            enabled: true
+            host: mlflow-postgresql
+            port: 5432
+            database: mlflow
+            user: mlflow
+            password: mlflow123
+
+        # Disable internal MinIO (using Velero's)
         minio:
-          enabled: true
-          image:
-            registry: public.ecr.aws
-            repository: bitnami/minio
-          auth:
-            rootUser: minio
-            rootPassword: minio123
-        
-        # Use integrated PostgreSQL for tracking server
+          enabled: false
+
+        # Enable PostgreSQL subchart
         postgresql:
           enabled: true
-          image:
-            registry: public.ecr.aws
-            repository: bitnami/postgresql
-          auth:
-            username: mlflow
-            password: mlflow123
-            database: mlflow
-        
-        # Main MLflow image
-        image:
-          registry: public.ecr.aws
-          repository: bitnami/mlflow
-          auth:
-            enabled: false # Open access for simplicity (or configure basic auth)
-          podSecurityContext:
-            enabled: false
-          containerSecurityContext:
-            enabled: false
-            
+          global:
+            postgresql:
+              auth:
+                username: mlflow
+                password: mlflow123
+                database: mlflow
+
   destination:
     server: https://kubernetes.default.svc
     namespace: mlflow

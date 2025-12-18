@@ -16,6 +16,9 @@ spec:
     chart: mlflow
     helm:
       values: |
+        global:
+          imageRegistry: ghcr.io
+        
         ingress:
           enabled: true
           ingressClassName: traefik

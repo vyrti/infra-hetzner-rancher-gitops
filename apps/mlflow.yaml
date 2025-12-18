@@ -44,18 +44,19 @@ spec:
           MLFLOW_S3_IGNORE_TLS: "true"
 
         # Backend Storage (PostgreSQL)
+        # Using subchart, so external config should be disabled to satisfy schema
         backendStore:
           postgres:
-            enabled: true
-            host: mlflow-postgresql
-            port: 5432
-            database: mlflow
-            user: mlflow
-            password: mlflow123
+            enabled: false
+            # host: mlflow-postgresql
+            # port: 5432
+            # database: mlflow
+            # user: mlflow
+            # password: mlflow123
 
-        # Disable internal MinIO (using Velero's)
-        minio:
-          enabled: false
+        # MinIO key not allowed in this chart version
+        # minio:
+        #   enabled: false
 
         # Enable PostgreSQL subchart
         postgresql:

@@ -42,6 +42,8 @@ spec:
           sidekiq:
             minReplicas: 1
             maxReplicas: 2
+        upgradeCheck:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: gitlab

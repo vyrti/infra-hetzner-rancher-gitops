@@ -31,11 +31,6 @@ spec:
             tls:
               enabled: true
               secretName: gitlab-tls
-        certmanager-issuer:
-          email: admin@aleklab.com
-        certmanager:
-          installCRDs: false
-          install: false
         prometheus:
           install: false
         gitlab-runner:

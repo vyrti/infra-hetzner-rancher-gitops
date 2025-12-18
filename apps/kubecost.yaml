@@ -38,9 +38,12 @@ spec:
           nodeExporter:
             enabled: false
         global:
+          clusterId: "hetzner-rke2"
           prometheus:
             enabled: true
             fqdn: http://mimir-nginx.mimir.svc.cluster.local:80/prometheus
+        networkCosts:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: kubecost

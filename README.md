@@ -8,7 +8,7 @@ Kubernetes platform deployed via ArgoCD App of Apps pattern.
 # 1. Deploy infrastructure
 cd infrastructure && terraform init && terraform apply
 
-# 2. Update repo URL in root.yaml and apps/cluster-issuer.yaml
+# 2. Update repo URL in root.yaml
 
 # 3. Apply root application
 export KUBECONFIG=$(pwd)/rke2.yaml

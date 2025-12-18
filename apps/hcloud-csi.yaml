@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://charts.hetzner.cloud
-    targetRevision: 2.12.1
+    targetRevision: 2.18.3
     chart: hcloud-csi
     helm:
       values: |

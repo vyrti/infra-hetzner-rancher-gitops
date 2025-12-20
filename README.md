@@ -15,25 +15,45 @@ export KUBECONFIG=$(pwd)/rke2.yaml
 kubectl apply -f ../gitops/root.yaml
 ```
 
-## Applications (14 apps)
+## Applications (25 apps)
 
 | App | Version | Namespace |
 |-----|---------|-----------|
 | **Mimir** | 6.0.5 | mimir |
-| **Grafana** | 8.8.2 | monitoring |
-| **Loki** | 6.24.0 | monitoring |
-| **Tempo** | 1.14.0 | monitoring |
-| **Alloy** | 0.12.0 | monitoring |
-| **kube-state-metrics** | 5.27.0 | monitoring |
-| **node-exporter** | 4.43.0 | monitoring |
-| **Kubecost** | 2.6.1 | kubecost |
-| **Trivy** | 0.31.0 | trivy-system |
+| **Grafana** | 10.3.2 | monitoring |
+| **Loki** | 6.49.0 | monitoring |
+| **Tempo** | 1.24.1 | monitoring |
+| **Alloy** | 1.5.1 | monitoring |
+| **kube-state-metrics** | 7.0.0 | monitoring |
+| **node-exporter** | 4.49.2 | monitoring |
+| **Kubecost** | 2.5.5 | kubecost |
+| **Trivy** | 0.20.1 | trivy-system |
 | **Istio** | 1.24.2 | istio-system |
-| **OpenBao** | 0.9.0 | openbao |
+| **OpenBao** | 0.21.2 | openbao |
 | **GitLab** | 9.6.2 | gitlab |
 | **Velero** | 11.2.0 | velero |
 | **Argo Workflows** | 0.46.2 | argo |
 | **MLflow** | 1.8.1 | mlflow |
+| **hcloud-csi** | 2.18.3 | kube-system |
+| **sysctl-tuner** | HEAD | kube-system |
+| **Kyverno** | 3.6.1 | kyverno |
+| **CloudNativePG** | 0.27.0 | cnpg-system |
+| **ExternalDNS** | 1.19.0 | external-dns |
+| **Falco** | 7.0.2 | falco |
+| **Cert-Manager** | v1.19.1 | cert-manager |
+| **Traefik** | latest | traefik |
+| **Rancher** | latest | cattle-system |
+| **ArgoCD** | stable | argocd |
+
+> [!IMPORTANT]
+> **ExternalDNS** requires a Cloudflare API token secret. Create it before deploying:
+
+```bash
+kubectl create namespace external-dns
+kubectl create secret generic cloudflare-api-token \
+  --namespace external-dns \
+  --from-literal=api-token=YOUR_CLOUDFLARE_API_TOKEN
+```
 
 ## Monitoring Architecture
 

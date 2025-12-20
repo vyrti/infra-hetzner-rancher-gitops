@@ -1,0 +1,61 @@
+# ExternalDNS - Automatic DNS management for Kubernetes
+# Configured for Cloudflare
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.19.0
+    chart: external-dns
+    helm:
+      values: |
+        provider:
+          name: cloudflare
+        env:
+          - name: CF_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: cloudflare-api-token
+                key: api-token
+        # Domain filter - only manage records for this domain
+        domainFilters:
+          - aleklab.com
+        # Only manage A and CNAME records
+        managedRecordTypes:
+          - A
+          - CNAME
+        # Use TXT records for ownership
+        registry: txt
+        txtOwnerId: external-dns
+        # Policy: sync will delete records, upsert-only will not
+        policy: upsert-only
+        # Interval between syncs
+        interval: 1m
+        # Sources to watch
+        sources:
+          - service
+          - ingress
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-dns
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

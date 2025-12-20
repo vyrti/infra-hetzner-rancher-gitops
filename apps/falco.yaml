@@ -1,0 +1,48 @@
+# Falco - Runtime Security Monitoring
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: falco
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: https://falcosecurity.github.io/charts
+    targetRevision: 7.0.2
+    chart: falco
+    helm:
+      values: |
+        driver:
+          kind: modern_ebpf
+        tty: true
+        falco:
+          grpc:
+            enabled: false
+          grpc_output:
+            enabled: false
+          json_output: true
+          json_include_output_property: true
+        falcosidekick:
+          enabled: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        tolerations:
+          - operator: Exists
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: falco
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

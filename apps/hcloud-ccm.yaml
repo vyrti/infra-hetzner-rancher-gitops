@@ -1,0 +1,39 @@
+# Hetzner Cloud Controller Manager
+# Provides cloud provider integration for node lifecycle, LoadBalancer services, etc.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hcloud-cloud-controller-manager
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"  # Deploy early with CSI
+spec:
+  project: default
+  source:
+    repoURL: https://charts.hetzner.cloud
+    targetRevision: 1.27.0
+    chart: hcloud-cloud-controller-manager
+    helm:
+      values: |
+        networking:
+          enabled: true
+          clusterCIDR: "10.42.0.0/16"
+        env:
+          HCLOUD_TOKEN:
+            valueFrom:
+              secretKeyRef:
+                name: hcloud
+                key: token
+        secret:
+          create: false  # Assumes secret 'hcloud' exists in kube-system
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

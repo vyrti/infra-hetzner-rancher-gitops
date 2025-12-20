@@ -15,7 +15,7 @@ export KUBECONFIG=$(pwd)/rke2.yaml
 kubectl apply -f ../gitops/root.yaml
 ```
 
-## Applications (28 apps)
+## Applications (30 apps)
 
 | App | Version | Namespace |
 |-----|---------|-----------|
@@ -35,6 +35,7 @@ kubectl apply -f ../gitops/root.yaml
 | **Argo Workflows** | 0.46.2 | argo |
 | **MLflow** | 1.8.1 | mlflow |
 | **hcloud-csi** | 2.18.3 | kube-system |
+| **hcloud-ccm** | 1.27.0 | kube-system |
 | **sysctl-tuner** | HEAD | kube-system |
 | **Kyverno** | 3.6.1 | kyverno |
 | **CloudNativePG** | 0.27.0 | cnpg-system |
@@ -43,6 +44,7 @@ kubectl apply -f ../gitops/root.yaml
 | **KEDA** | 2.18.2 | keda |
 | **VPA** | 4.10.1 | vpa |
 | **External Secrets** | 0.20.4 | external-secrets |
+| **Crossplane** | 2.1.3 | crossplane-system |
 | **Cert-Manager** | v1.19.1 | cert-manager |
 | **Traefik** | latest | traefik |
 | **Rancher** | latest | cattle-system |

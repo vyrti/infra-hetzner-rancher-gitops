@@ -15,7 +15,7 @@ export KUBECONFIG=$(pwd)/rke2.yaml
 kubectl apply -f ../gitops/root.yaml
 ```
 
-## Applications (25 apps)
+## Applications (28 apps)
 
 | App | Version | Namespace |
 |-----|---------|-----------|
@@ -40,6 +40,9 @@ kubectl apply -f ../gitops/root.yaml
 | **CloudNativePG** | 0.27.0 | cnpg-system |
 | **ExternalDNS** | 1.19.0 | external-dns |
 | **Falco** | 7.0.2 | falco |
+| **KEDA** | 2.18.2 | keda |
+| **VPA** | 4.10.1 | vpa |
+| **External Secrets** | 0.20.4 | external-secrets |
 | **Cert-Manager** | v1.19.1 | cert-manager |
 | **Traefik** | latest | traefik |
 | **Rancher** | latest | cattle-system |
